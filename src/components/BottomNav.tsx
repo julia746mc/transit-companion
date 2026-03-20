@@ -1,7 +1,6 @@
-import { useState } from "react";
-import { Home, Search, Bell, MapPin } from "lucide-react";
+import { Home, Search, Bell, MapPin, CreditCard, Route, User } from "lucide-react";
 
-type Tab = "home" | "search" | "alerts" | "lines";
+export type Tab = "home" | "search" | "alerts" | "lines" | "ticket" | "profile";
 
 interface BottomNavProps {
   activeTab: Tab;
@@ -11,8 +10,9 @@ interface BottomNavProps {
 const tabs = [
   { id: "home" as Tab, label: "Início", icon: Home },
   { id: "search" as Tab, label: "Buscar", icon: Search },
+  { id: "ticket" as Tab, label: "Bilhete", icon: CreditCard },
   { id: "alerts" as Tab, label: "Alertas", icon: Bell },
-  { id: "lines" as Tab, label: "Linhas", icon: MapPin },
+  { id: "profile" as Tab, label: "Perfil", icon: User },
 ];
 
 const BottomNav = ({ activeTab, onTabChange }: BottomNavProps) => {
@@ -25,18 +25,18 @@ const BottomNav = ({ activeTab, onTabChange }: BottomNavProps) => {
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl transition-all duration-200 ease-out active:scale-95 ${
+              className={`relative flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all duration-200 ease-out active:scale-95 ${
                 isActive
                   ? "text-primary"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
               <tab.icon
-                size={22}
+                size={21}
                 strokeWidth={isActive ? 2.5 : 2}
                 className="transition-all duration-200"
               />
-              <span className={`text-[10px] font-medium tracking-wide ${isActive ? "font-semibold" : ""}`}>
+              <span className={`text-[9px] font-medium tracking-wide ${isActive ? "font-semibold" : ""}`}>
                 {tab.label}
               </span>
               {isActive && (
@@ -51,4 +51,3 @@ const BottomNav = ({ activeTab, onTabChange }: BottomNavProps) => {
 };
 
 export default BottomNav;
-export type { Tab };
