@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bell, ChevronRight, MapPin } from "lucide-react";
+import { Bell, ChevronRight, Route, Newspaper } from "lucide-react";
 import SearchBar from "@/components/SearchBar";
 import TransportSelector from "@/components/TransportSelector";
 import AlertCard from "@/components/AlertCard";
@@ -9,9 +9,12 @@ import { TransportType, mockAlerts, mockLines, Line } from "@/data/transit";
 interface HomeScreenProps {
   onViewAlerts: () => void;
   onSelectLine: (line: Line) => void;
+  onOpenRoutePlanner: () => void;
+  onOpenNotifications: () => void;
+  onOpenNews: () => void;
 }
 
-const HomeScreen = ({ onViewAlerts, onSelectLine }: HomeScreenProps) => {
+const HomeScreen = ({ onViewAlerts, onSelectLine, onOpenRoutePlanner, onOpenNotifications, onOpenNews }: HomeScreenProps) => {
   const [search, setSearch] = useState("");
   const [transportFilter, setTransportFilter] = useState<TransportType | null>(null);
 
@@ -32,17 +35,19 @@ const HomeScreen = ({ onViewAlerts, onSelectLine }: HomeScreenProps) => {
               Linha Certa
             </h1>
           </div>
-          <button
-            onClick={onViewAlerts}
-            className="relative w-11 h-11 rounded-xl bg-card transit-shadow flex items-center justify-center text-foreground hover:transit-shadow-lg transition-all active:scale-95"
-          >
-            <Bell size={20} />
-            {criticalCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold flex items-center justify-center animate-pulse-dot">
-                {criticalCount}
-              </span>
-            )}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onOpenNotifications}
+              className="relative w-11 h-11 rounded-xl bg-card transit-shadow flex items-center justify-center text-foreground hover:transit-shadow-lg transition-all active:scale-95"
+            >
+              <Bell size={20} />
+              {criticalCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold flex items-center justify-center animate-pulse-dot">
+                  {criticalCount}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -52,8 +57,32 @@ const HomeScreen = ({ onViewAlerts, onSelectLine }: HomeScreenProps) => {
       </div>
 
       {/* Transport selector */}
-      <div className="mb-6 opacity-0 animate-fade-up" style={{ animationDelay: "200ms", animationFillMode: "forwards" }}>
+      <div className="mb-5 opacity-0 animate-fade-up" style={{ animationDelay: "200ms", animationFillMode: "forwards" }}>
         <TransportSelector selected={transportFilter} onSelect={setTransportFilter} />
+      </div>
+
+      {/* Quick actions */}
+      <div className="flex gap-3 mb-6 opacity-0 animate-fade-up" style={{ animationDelay: "280ms", animationFillMode: "forwards" }}>
+        <button
+          onClick={onOpenRoutePlanner}
+          className="flex-1 flex items-center gap-3 p-4 bg-primary text-primary-foreground rounded-xl transit-shadow-lg active:scale-[0.98] transition-transform"
+        >
+          <Route size={20} />
+          <div className="text-left">
+            <p className="text-sm font-semibold">Planejar rota</p>
+            <p className="text-[10px] opacity-70">Origem → Destino</p>
+          </div>
+        </button>
+        <button
+          onClick={onOpenNews}
+          className="flex-1 flex items-center gap-3 p-4 bg-card text-foreground rounded-xl transit-shadow border-2 border-border active:scale-[0.98] transition-transform"
+        >
+          <Newspaper size={20} className="text-muted-foreground" />
+          <div className="text-left">
+            <p className="text-sm font-semibold">Notícias</p>
+            <p className="text-[10px] text-muted-foreground">Novidades SP</p>
+          </div>
+        </button>
       </div>
 
       {/* Recent alerts */}
@@ -78,7 +107,7 @@ const HomeScreen = ({ onViewAlerts, onSelectLine }: HomeScreenProps) => {
       <div className="mb-6">
         <h2 className="font-display font-semibold text-base text-foreground mb-3">Linhas favoritas</h2>
         <div className="space-y-2.5">
-          {mockLines.slice(0, 2).map((line, i) => (
+          {mockLines.slice(0, 3).map((line, i) => (
             <LineCard key={line.id} line={line} index={i} onClick={() => onSelectLine(line)} />
           ))}
         </div>
