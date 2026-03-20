@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bell, ChevronRight, Route, Newspaper } from "lucide-react";
+import { Bell, ChevronRight, Route, Newspaper, Map, Twitter } from "lucide-react";
 import SearchBar from "@/components/SearchBar";
 import TransportSelector from "@/components/TransportSelector";
 import AlertCard from "@/components/AlertCard";
@@ -12,9 +12,11 @@ interface HomeScreenProps {
   onOpenRoutePlanner: () => void;
   onOpenNotifications: () => void;
   onOpenNews: () => void;
+  onOpenMetroMap: () => void;
+  onOpenTwitterFeed: () => void;
 }
 
-const HomeScreen = ({ onViewAlerts, onSelectLine, onOpenRoutePlanner, onOpenNotifications, onOpenNews }: HomeScreenProps) => {
+const HomeScreen = ({ onViewAlerts, onSelectLine, onOpenRoutePlanner, onOpenNotifications, onOpenNews, onOpenMetroMap, onOpenTwitterFeed }: HomeScreenProps) => {
   const [search, setSearch] = useState("");
   const [transportFilter, setTransportFilter] = useState<TransportType | null>(null);
 
@@ -61,11 +63,11 @@ const HomeScreen = ({ onViewAlerts, onSelectLine, onOpenRoutePlanner, onOpenNoti
         <TransportSelector selected={transportFilter} onSelect={setTransportFilter} />
       </div>
 
-      {/* Quick actions */}
-      <div className="flex gap-3 mb-6 opacity-0 animate-fade-up" style={{ animationDelay: "280ms", animationFillMode: "forwards" }}>
+      {/* Quick actions - 2x2 grid */}
+      <div className="grid grid-cols-2 gap-3 mb-6 opacity-0 animate-fade-up" style={{ animationDelay: "280ms", animationFillMode: "forwards" }}>
         <button
           onClick={onOpenRoutePlanner}
-          className="flex-1 flex items-center gap-3 p-4 bg-primary text-primary-foreground rounded-xl transit-shadow-lg active:scale-[0.98] transition-transform"
+          className="flex items-center gap-3 p-4 bg-primary text-primary-foreground rounded-xl transit-shadow-lg active:scale-[0.98] transition-transform"
         >
           <Route size={20} />
           <div className="text-left">
@@ -74,8 +76,28 @@ const HomeScreen = ({ onViewAlerts, onSelectLine, onOpenRoutePlanner, onOpenNoti
           </div>
         </button>
         <button
+          onClick={onOpenMetroMap}
+          className="flex items-center gap-3 p-4 bg-transit-metro text-primary-foreground rounded-xl transit-shadow-lg active:scale-[0.98] transition-transform"
+        >
+          <Map size={20} />
+          <div className="text-left">
+            <p className="text-sm font-semibold">Mapa</p>
+            <p className="text-[10px] opacity-70">Rede completa</p>
+          </div>
+        </button>
+        <button
+          onClick={onOpenTwitterFeed}
+          className="flex items-center gap-3 p-4 bg-card text-foreground rounded-xl transit-shadow border-2 border-border active:scale-[0.98] transition-transform"
+        >
+          <Twitter size={20} className="text-muted-foreground" />
+          <div className="text-left">
+            <p className="text-sm font-semibold">Feed X</p>
+            <p className="text-[10px] text-muted-foreground">Tempo real</p>
+          </div>
+        </button>
+        <button
           onClick={onOpenNews}
-          className="flex-1 flex items-center gap-3 p-4 bg-card text-foreground rounded-xl transit-shadow border-2 border-border active:scale-[0.98] transition-transform"
+          className="flex items-center gap-3 p-4 bg-card text-foreground rounded-xl transit-shadow border-2 border-border active:scale-[0.98] transition-transform"
         >
           <Newspaper size={20} className="text-muted-foreground" />
           <div className="text-left">
