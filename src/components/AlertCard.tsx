@@ -1,6 +1,7 @@
 import { Alert } from "@/data/transit";
 import { transportOptions } from "@/data/transit";
-import { ThumbsUp, Clock } from "lucide-react";
+import { ThumbsUp, Clock, Share2 } from "lucide-react";
+import { useState } from "react";
 
 interface AlertCardProps {
   alert: Alert;
@@ -21,6 +22,14 @@ const severityDot = {
 
 const AlertCard = ({ alert, index }: AlertCardProps) => {
   const transport = transportOptions.find((t) => t.type === alert.type);
+  const [shared, setShared] = useState(false);
+
+  const shareToTwitter = () => {
+    const text = encodeURIComponent(`⚠️ ${alert.title} - ${alert.line}\n${alert.description}\n\n#LinhaCerta #TransporteSP`);
+    window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank", "width=550,height=420");
+    setShared(true);
+    setTimeout(() => setShared(false), 2000);
+  };
 
   return (
     <div
@@ -55,10 +64,21 @@ const AlertCard = ({ alert, index }: AlertCardProps) => {
           </span>
           <span>por {alert.reportedBy}</span>
         </div>
-        <button className="flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary/80 transition-colors active:scale-95">
-          <ThumbsUp size={13} />
-          <span>{alert.confirmations}</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={shareToTwitter}
+            className={`flex items-center gap-1.5 text-xs font-medium transition-colors active:scale-95 ${
+              shared ? "text-status-ok" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <Share2 size={12} />
+            <span className="hidden sm:inline">{shared ? "Compartilhado!" : "X"}</span>
+          </button>
+          <button className="flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary/80 transition-colors active:scale-95">
+            <ThumbsUp size={13} />
+            <span>{alert.confirmations}</span>
+          </button>
+        </div>
       </div>
     </div>
   );

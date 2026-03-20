@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import BottomNav, { Tab } from "@/components/BottomNav";
 import HomeScreen from "@/components/screens/HomeScreen";
 import SearchScreen from "@/components/screens/SearchScreen";
@@ -13,9 +13,11 @@ import OnboardingScreen from "@/components/screens/OnboardingScreen";
 import AuthScreen from "@/components/screens/AuthScreen";
 import RoutePlanner from "@/components/screens/RoutePlanner";
 import ReportAlertForm from "@/components/screens/ReportAlertForm";
+import MetroMapScreen from "@/components/screens/MetroMapScreen";
+import TwitterFeedScreen from "@/components/screens/TwitterFeedScreen";
 import { Line } from "@/data/transit";
 
-type AppScreen = "onboarding" | "auth" | "main" | "line-detail" | "route-planner" | "report-alert" | "notifications" | "news";
+type AppScreen = "onboarding" | "auth" | "main" | "line-detail" | "route-planner" | "report-alert" | "notifications" | "news" | "metro-map" | "twitter-feed";
 
 const Index = () => {
   const [screen, setScreen] = useState<AppScreen>(() => {
@@ -74,6 +76,16 @@ const Index = () => {
     return <ReportAlertForm onBack={() => setScreen("main")} onSubmit={() => { setScreen("main"); setActiveTab("alerts"); }} />;
   }
 
+  // Metro map
+  if (screen === "metro-map") {
+    return <MetroMapScreen onBack={() => setScreen("main")} onSelectLine={handleSelectLine} />;
+  }
+
+  // Twitter feed
+  if (screen === "twitter-feed") {
+    return <TwitterFeedScreen onBack={() => setScreen("main")} />;
+  }
+
   // Notifications
   if (screen === "notifications") {
     return (
@@ -109,6 +121,8 @@ const Index = () => {
             onOpenRoutePlanner={() => setScreen("route-planner")}
             onOpenNotifications={() => setScreen("notifications")}
             onOpenNews={() => setScreen("news")}
+            onOpenMetroMap={() => setScreen("metro-map")}
+            onOpenTwitterFeed={() => setScreen("twitter-feed")}
           />
         )}
         {activeTab === "search" && <SearchScreen onSelectLine={handleSelectLine} />}
