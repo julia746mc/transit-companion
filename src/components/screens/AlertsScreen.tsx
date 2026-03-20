@@ -2,7 +2,11 @@ import { useState } from "react";
 import AlertCard from "@/components/AlertCard";
 import { mockAlerts, TransportType, transportOptions } from "@/data/transit";
 
-const AlertsScreen = () => {
+interface AlertsScreenProps {
+  onReportAlert: () => void;
+}
+
+const AlertsScreen = ({ onReportAlert }: AlertsScreenProps) => {
   const [filter, setFilter] = useState<TransportType | null>(null);
 
   const filtered = mockAlerts.filter((a) => !filter || a.type === filter);
@@ -45,7 +49,10 @@ const AlertsScreen = () => {
       </div>
 
       {/* Alert report button */}
-      <button className="w-full mb-5 py-3.5 rounded-xl bg-accent text-accent-foreground font-semibold text-sm transit-shadow hover:transit-shadow-lg transition-all active:scale-[0.98]">
+      <button
+        onClick={onReportAlert}
+        className="w-full mb-5 py-3.5 rounded-xl bg-accent text-accent-foreground font-semibold text-sm transit-shadow hover:transit-shadow-lg transition-all active:scale-[0.98]"
+      >
         + Reportar alerta
       </button>
 
