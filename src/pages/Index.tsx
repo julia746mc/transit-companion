@@ -1,16 +1,31 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import BottomNav, { Tab } from "@/components/BottomNav";
+import HomeScreen from "@/components/screens/HomeScreen";
+import SearchScreen from "@/components/screens/SearchScreen";
+import AlertsScreen from "@/components/screens/AlertsScreen";
+import LinesScreen from "@/components/screens/LinesScreen";
+import LineDetail from "@/components/LineDetail";
+import { Line } from "@/data/transit";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const Index = () => {
+  const [activeTab, setActiveTab] = useState<Tab>("home");
+  const [selectedLine, setSelectedLine] = useState<Line | null>(null);
+
+  if (selectedLine) {
+    return <LineDetail line={selectedLine} onBack={() => setSelectedLine(null)} />;
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="min-h-screen bg-background max-w-md mx-auto relative">
+      <div className="pb-24">
+        {activeTab === "home" && <HomeScreen onViewAlerts={() => setActiveTab("alerts")} onSelectLine={setSelectedLine} />}
+        {activeTab === "search" && <SearchScreen onSelectLine={setSelectedLine} />}
+        {activeTab === "alerts" && <AlertsScreen />}
+        {activeTab === "lines" && <LinesScreen onSelectLine={setSelectedLine} />}
+      </div>
+      <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
